@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#BDD347</color>
+    <color name="primary_dark">#BDD347</color>
+    <color name="accent">#BDD347</color>
+
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+    <color name="divider">#DDD</color>
+    <color name="icon">#757575</color>
+    <color name="bg_default">#efefef</color>
+
+    <color name="black">#000</color>
+    <color name="white">#fff</color>
+    <color name="gray">#ccc</color>
+
+    <color name="transparent">#00000000</color>
+
+</resources>
