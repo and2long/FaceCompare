@@ -7,8 +7,9 @@
 - 使用Face++的网络API实现，通过调用次API，传入两张图片参数，得到对比结果。
 
 # 应用截图
-<img src="pics/pic10.jpg" width="320px"/>
-<img src="pics/pic20.jpg" width="320px"/>
+<!-- ![img](pics/pic10.png) -->
+<img src="pics/pic10.png" width="320" height="480" />
+<img src="pics/pic20.png" width="320" height="480"/>
 
-<img src="pics/pic30.jpg" width="320px"/>
-<img src="pics/pic40.jpg" width="320px"/>
+<img src="pics/pic30.png" width="320" height="480"/>
+<img src="pics/pic40.png" width="320" height="480"/>
