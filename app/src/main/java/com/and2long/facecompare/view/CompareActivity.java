@@ -11,10 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.and2long.facecompare.GlideApp;
 import com.and2long.facecompare.R;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -65,9 +64,8 @@ public class CompareActivity extends AppCompatActivity implements View.OnClickLi
      * 加载图片
      */
     private void loadImages() {
-        RequestOptions options = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE);
-        Glide.with(this).load(IMAGE_FILE1).apply(options).into(iv1);
-        Glide.with(this).load(IMAGE_FILE2).apply(options).into(iv2);
+        GlideApp.with(this).load(IMAGE_FILE1).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(iv1);
+        GlideApp.with(this).load(IMAGE_FILE2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(iv2);
     }
 
     @Override
