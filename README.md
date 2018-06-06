@@ -8,8 +8,6 @@
 
 # 应用截图
 <!-- ![img](pics/pic10.png) -->
-<img src="pics/pic10.png" width="320" height="480" />
-<img src="pics/pic20.png" width="320" height="480"/>
+<img src="pics/pic10.png" width="320" height="480" /><img src="pics/pic20.png" width="320" height="480"/>
 
-<img src="pics/pic30.png" width="320" height="480"/>
-<img src="pics/pic40.png" width="320" height="480"/>
+<img src="pics/pic30.png" width="320" height="480"/><img src="pics/pic40.png" width="320" height="480"/>
