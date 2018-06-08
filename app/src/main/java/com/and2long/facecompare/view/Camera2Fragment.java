@@ -96,7 +96,7 @@ public class Camera2Fragment extends Fragment
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "Camera2BasicFragment";
+    private static final String TAG = "FaceFragment";
 
     /**
      * Camera state: Showing camera preview.
@@ -126,7 +126,7 @@ public class Camera2Fragment extends Fragment
     /**
      * Max preview width that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_WIDTH = 1920;
+    private static final int MAX_PREVIEW_WIDTH = 720;
 
     /**
      * Max preview height that is guaranteed by Camera2 API

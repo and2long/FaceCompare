@@ -64,11 +64,14 @@ public class AutoFitTextureView extends TextureView {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         if (0 == mRatioWidth || 0 == mRatioHeight) {
             setMeasuredDimension(width, height);
+            System.out.println("orientation:00");
         } else {
             if (width > height * mRatioWidth / mRatioHeight) {
                 setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
+                System.out.println("orientation:landscape");
             } else {
                 setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
+                System.out.println("orientation:portrait");
             }
         }
     }
