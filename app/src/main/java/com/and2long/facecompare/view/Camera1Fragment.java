@@ -297,6 +297,10 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener, A
             switch (mState) {
                 case STATE_PREVIEW: {
                     // We have nothing to do when the camera preview is working normally.
+                    int afState = result.get(CaptureResult.CONTROL_AF_STATE);
+                    if (CaptureResult.CONTROL_AF_STATE_PASSIVE_FOCUSED == afState) {
+                        captureStillPicture();
+                    }
                     break;
                 }
                 case STATE_WAITING_LOCK: {
