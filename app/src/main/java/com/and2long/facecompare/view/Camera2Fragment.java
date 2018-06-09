@@ -60,6 +60,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.and2long.facecompare.R;
@@ -126,12 +127,12 @@ public class Camera2Fragment extends Fragment
     /**
      * Max preview width that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_WIDTH = 720;
+    private static final int MAX_PREVIEW_WIDTH = 1080;
 
     /**
      * Max preview height that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_HEIGHT = 1080;
+    private static final int MAX_PREVIEW_HEIGHT = 1920;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -142,7 +143,7 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-            openCamera(width, height);
+            openCamera(width, height, Integer.parseInt(mCameraId));
         }
 
         @Override
@@ -164,7 +165,7 @@ public class Camera2Fragment extends Fragment
     /**
      * ID of the current {@link CameraDevice}.
      */
-    private String mCameraId;
+    private String mCameraId = "0";
 
     /**
      * An {@link AutoFitTextureView} for camera preview.
@@ -285,6 +286,7 @@ public class Camera2Fragment extends Fragment
      */
     private int mSensorOrientation;
 
+    private int state;
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
@@ -292,6 +294,9 @@ public class Camera2Fragment extends Fragment
             = new CameraCaptureSession.CaptureCallback() {
 
         private void process(CaptureResult result) {
+            if (state != mState) {
+                state = mState;
+            }
             switch (mState) {
                 case STATE_PREVIEW: {
                     // We have nothing to do when the camera preview is working normally.
@@ -312,6 +317,8 @@ public class Camera2Fragment extends Fragment
                         } else {
                             runPrecaptureSequence();
                         }
+                    } else {
+                        captureStillPicture();
                     }
                     break;
                 }
@@ -352,6 +359,7 @@ public class Camera2Fragment extends Fragment
         }
 
     };
+    private ImageView ivSwitch;
 
     /**
      * Shows a {@link Toast} on the UI thread.
@@ -441,8 +449,10 @@ public class Camera2Fragment extends Fragment
         btnRecapture.setOnClickListener(this);
         btnNext = view.findViewById(R.id.next);
         btnNext.setOnClickListener(this);
-        showCameraLayout();
         mTextureView = view.findViewById(R.id.texture);
+        ivSwitch = view.findViewById(R.id.iv_switch);
+        ivSwitch.setOnClickListener(this);
+        showCameraLayout();
     }
 
     /**
@@ -454,6 +464,7 @@ public class Camera2Fragment extends Fragment
                 btnRecapture.setVisibility(View.GONE);
                 btnNext.setVisibility(View.GONE);
                 btnCapture.setVisibility(View.VISIBLE);
+                ivSwitch.setVisibility(View.VISIBLE);
             }
         };
         getActivity().runOnUiThread(runnable);
@@ -468,6 +479,7 @@ public class Camera2Fragment extends Fragment
                 btnRecapture.setVisibility(View.VISIBLE);
                 btnNext.setVisibility(View.VISIBLE);
                 btnCapture.setVisibility(View.GONE);
+                ivSwitch.setVisibility(View.GONE);
             }
         };
         getActivity().runOnUiThread(runnable);
@@ -490,7 +502,7 @@ public class Camera2Fragment extends Fragment
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
         // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            openCamera(mTextureView.getWidth(), mTextureView.getHeight(), Integer.parseInt(mCameraId));
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -531,7 +543,7 @@ public class Camera2Fragment extends Fragment
      * @param height The height of available size for camera preview
      */
     @SuppressWarnings("SuspiciousNameCombination")
-    private void setUpCameraOutputs(int width, int height) {
+    private void setUpCameraOutputs(int width, int height, int lens) {
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
@@ -541,7 +553,7 @@ public class Camera2Fragment extends Fragment
 
                 // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                if (facing != null && facing == lens) {
                     continue;
                 }
 
@@ -550,7 +562,6 @@ public class Camera2Fragment extends Fragment
                 if (map == null) {
                     continue;
                 }
-
                 // For still image captures, we use the largest available size.
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
@@ -642,13 +653,13 @@ public class Camera2Fragment extends Fragment
     /**
      * Opens the camera specified by {@link Camera2Fragment#mCameraId}.
      */
-    private void openCamera(int width, int height) {
+    private void openCamera(int width, int height, int lens) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission();
             return;
         }
-        setUpCameraOutputs(width, height);
+        setUpCameraOutputs(width, height, lens);
         configureTransform(width, height);
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
@@ -687,6 +698,27 @@ public class Camera2Fragment extends Fragment
         } finally {
             mCameraOpenCloseLock.release();
         }
+    }
+
+    public void reOpenCamera() {
+        if (mTextureView.isAvailable()) {
+            openCamera(mTextureView.getWidth(), mTextureView.getHeight(), Integer.parseInt(mCameraId));
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
+    }
+
+    private String CAMERA_FRONT = "1";
+    private String CAMERA_BACK = "0";
+
+    public void switchCamera() {
+        if (mCameraId.equals(CAMERA_FRONT)) {
+            mCameraId = CAMERA_BACK;
+        } else if (mCameraId.equals(CAMERA_BACK)) {
+            mCameraId = CAMERA_FRONT;
+        }
+        closeCamera();
+        reOpenCamera();
     }
 
     /**
@@ -944,6 +976,9 @@ public class Camera2Fragment extends Fragment
                 if (getActivity() != null) {
                     getActivity().finish();
                 }
+                break;
+            case R.id.iv_switch:
+                switchCamera();
                 break;
         }
     }

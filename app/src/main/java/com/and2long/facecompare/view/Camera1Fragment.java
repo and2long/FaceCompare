@@ -128,12 +128,12 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener, A
     /**
      * Max preview width that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_WIDTH = 720;
+    private static final int MAX_PREVIEW_WIDTH = 1080;
 
     /**
      * Max preview height that is guaranteed by Camera2 API
      */
-    private static final int MAX_PREVIEW_HEIGHT = 1080;
+    private static final int MAX_PREVIEW_HEIGHT = 1920;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
