@@ -47,7 +47,7 @@ public class CompareActivity extends AppCompatActivity implements View.OnClickLi
         IMAGE_FILE1 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic1.jpg");
         IMAGE_FILE2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic2.jpg");
 
-        setTitle("人脸对比");
+        setTitle(getString(R.string.title_face_compare));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         iv1 = findViewById(R.id.iv1);
@@ -137,9 +137,9 @@ public class CompareActivity extends AppCompatActivity implements View.OnClickLi
                             JSONObject jsonObject = new JSONObject(response.body());
                             if (jsonObject.has("confidence")) {
                                 double confidence = (double) jsonObject.get("confidence");
-                                tvResult.setText("对比相似度：" + confidence);
+                                tvResult.setText(getString(R.string.similarity) + confidence);
                             } else {
-                                tvResult.setText("至少一张图片中未检测到人脸！");
+                                tvResult.setText(R.string.alert_no_face);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
